@@ -15,7 +15,7 @@ class ApiUserIdentity extends User implements RateLimitInterface
     /**
      * @var int
      */
-    public $rateWindowSize = 3600;
+    public $rateWindowSize = 36000;
 
     /**
      * Returns the maximum number of allowed requests and the window size.

@@ -38,9 +38,9 @@ class Module extends \yii\base\Module
             ],
         ];
 
-        $behaviors['rateLimiter'] = [
+        /*$behaviors['rateLimiter'] = [
             'class' => RateLimiter::class,
-        ];
+        ];*/
 
         return $behaviors;
     }

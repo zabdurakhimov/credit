@@ -3,6 +3,8 @@
 namespace backend\controllers;
 
 use backend\models\search\TimelineEventSearch;
+use common\models\Article;
+use common\models\User;
 use Yii;
 use yii\web\Controller;
 
@@ -19,6 +21,13 @@ class TimelineEventController extends Controller
      */
     public function actionIndex()
     {
+        /*$user = Article::find()
+            ->joinWith('author', true)
+            ->where(['user.id' => 1])
+            ->asArray()
+            ->one();
+         echo (json_encode($user ) );die;*/
+
         $searchModel = new TimelineEventSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->sort = [

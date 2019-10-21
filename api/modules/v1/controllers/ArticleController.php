@@ -109,6 +109,7 @@ class ArticleController extends ActiveController
         $model = Article::find()
             ->published()
             ->andWhere(['id' => (int)$id])
+//            ->joinWith('category')
             ->one();
         if (!$model) {
             throw new HttpException(404);
