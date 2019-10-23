@@ -20,7 +20,7 @@ class LoginFormAPI extends LoginForm
     {
         return [
             // username and password are both required
-            [['phone_number', 'password', 'ud_id'], 'required'],
+            [['phone_number', 'password'], 'required'],
             // phone number format
 //            [['phone_number'], 'match', 'pattern' => '/^\+998(90|91|93|94|95|97|98|99)[0-9]{7}$/'],
             // rememberMe must be a boolean value

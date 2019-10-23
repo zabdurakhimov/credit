@@ -36,6 +36,7 @@ class UserController extends Controller
 
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::class,
+            'except' => ['login'],
             'authMethods' => [
                 HttpBasicAuth::class,
                 HttpBearerAuth::class,
@@ -56,7 +57,7 @@ class UserController extends Controller
             'view' => [
                 'class' => ViewAction::class,
                 'modelClass' => $this->modelClass,
-                'findModel' => [$this, 'findModel']
+                'findModel' => [$this, 'findByPhone']
             ],
             'options' => [
                 'class' => OptionsAction::class
@@ -130,6 +131,26 @@ class UserController extends Controller
             ->joinWith('userProfile', true)
             ->active()
             ->andWhere(['user.id' => (int)$id])
+            ->asArray()
+            ->one();
+        if (!$model) {
+            throw new HttpException(404);
+        }
+        return $model;
+    }
+
+
+    /**
+     * @param $phone
+     * @return array|null|\yii\db\ActiveRecord
+     * @throws HttpException
+     */
+    public function findByPhone($phone)
+    {
+        $model = User::find()
+            ->joinWith('userProfile', true)
+            ->active()
+            ->andWhere(['user.phone_number' => $phone])
             ->asArray()
             ->one();
         if (!$model) {
