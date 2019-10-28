@@ -14,7 +14,7 @@ class Request extends \common\models\Request implements Linkable
     public function fields()
     {
         return ['id', 'type', 'accepted_response_id', 'status', 'offer_id', 'description_short',
-            'description_long', 'created_at', 'category', 'createdBy', 'acceptedResponse'];
+            'description_long', 'created_at', 'category', 'createdBy', 'acceptedResponse', 'offer'];
     }
 
     public function extraFields()
