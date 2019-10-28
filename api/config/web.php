@@ -5,7 +5,11 @@ $config = [
     'defaultRoute' => 'site/index',
     'bootstrap' => ['maintenance'],
     'modules' => [
-        'v1' => \api\modules\v1\Module::class
+        'v1' => \api\modules\v1\Module::class,
+        'treemanager' =>  [
+            'class' => '\kartik\tree\Module',
+            // other module settings, refer detailed documentation
+        ],
     ],
     'components' => [
         'errorHandler' => [
@@ -30,7 +34,7 @@ $config = [
             'enableAutoLogin' => true,
             'as afterLogin' => common\behaviors\LoginTimestampBehavior::class
         ]
-    ]
+    ],
 ];
 
 return $config;
