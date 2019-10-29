@@ -4,6 +4,7 @@ namespace api\modules\v1\controllers;
 
 use api\modules\v1\resources\Article;
 use api\modules\v1\resources\Request;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 use yii\rest\IndexAction;
@@ -14,6 +15,7 @@ use yii\rest\DeleteAction;
 use yii\rest\Serializer;
 use yii\rest\ViewAction;
 use yii\web\HttpException;
+use yii\web\Response;
 
 /**
 
@@ -21,6 +23,13 @@ use yii\web\HttpException;
  */
 class RequestController extends ActiveController
 {
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
+        return $behaviors;
+    }
     /**
      * @var string
      */
@@ -68,6 +77,7 @@ class RequestController extends ActiveController
             ]
         ];
     }
+
 
     /**
      * @return ActiveDataProvider

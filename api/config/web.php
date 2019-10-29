@@ -33,7 +33,7 @@ $config = [
             'loginUrl' => ['/user/sign-in/login'],
             'enableAutoLogin' => true,
             'as afterLogin' => common\behaviors\LoginTimestampBehavior::class
-        ]
+        ],
     ],
 ];
 

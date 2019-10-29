@@ -34,6 +34,7 @@ class UserController extends Controller
     {
         $behaviors = parent::behaviors();
 
+        $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
         $behaviors['authenticator'] = [
             'class' => CompositeAuth::class,
             'except' => ['login'],
@@ -111,13 +112,12 @@ class UserController extends Controller
         if ($model->login()) {
             $token = $model->user->access_token;
             $name = $model->user->username;
-            return ['error' => 0, 'message' => 'success', 'result' => ['access_token' => $token, 'name' => $name, ]];
+            return ['error' => 0, 'message' => 'success', 'result' => ['access_token' => $token, 'name' => $name,]];
         } else {
             $errors = $model->reformatErrors();
             return ['error' => 3, 'message' => 'Could not login.', 'result' => $errors];
         }
     }
-
 
 
     /**
