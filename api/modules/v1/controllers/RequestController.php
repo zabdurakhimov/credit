@@ -6,6 +6,11 @@ use api\modules\v1\resources\Article;
 use api\modules\v1\resources\Request;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBasicAuth;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\HttpHeaderAuth;
+use yii\filters\auth\QueryParamAuth;
 use yii\rest\ActiveController;
 use yii\rest\IndexAction;
 use yii\rest\OptionsAction;
@@ -28,6 +33,15 @@ class RequestController extends ActiveController
     {
         $behaviors = parent::behaviors();
         $behaviors['contentNegotiator']['formats']['text/html'] = Response::FORMAT_JSON;
+        $behaviors['authenticator'] = [
+            'class' => CompositeAuth::class,
+            'authMethods' => [
+                HttpBasicAuth::class,
+                HttpBearerAuth::class,
+                HttpHeaderAuth::class,
+                QueryParamAuth::class
+            ]
+        ];
         return $behaviors;
     }
     /**
