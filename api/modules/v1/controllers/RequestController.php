@@ -51,11 +51,21 @@ class RequestController extends ActiveController
 
     /**
      * @SWG\Get(path="/v1/request/index",
-     *     tags={"request", "index"},
-     *     summary="Retrieves the collection of Articles.",
+     *     tags={"List", "index"},
+     *     summary="Retrieves the collection of Requests.",
      *     @SWG\Response(
      *         response = 200,
      *         description = "Article collection response",
+     *         @SWG\Schema(ref = "#/definitions/Request")
+     *     ),
+     * )
+     *
+     * * @SWG\Post  (path="/v1/request/create",
+     *     tags={"Create", "create"},
+     *     summary="Creates a new Request.",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Request collection response",
      *         @SWG\Schema(ref = "#/definitions/Request")
      *     ),
      * )
@@ -79,6 +89,11 @@ class RequestController extends ActiveController
                 'class' => IndexAction::class,
                 'modelClass' => $this->modelClass,
                 'prepareDataProvider' => [$this, 'prepareDataProvider']
+            ],
+            'create' => [
+                'class' => CreateAction::class,
+                'modelClass' => $this->modelClass,
+                //'prepareDataProvider' => [$this, 'prepareDataProvider']
             ],
             'view' => [
                 'class' => ViewAction::class,

@@ -35,6 +35,10 @@ class Offer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['initial_pay', 'total_pay', 'period'], 'required'],
+            ['created_at', 'default', 'value' => time()],
+            ['updated_at', 'default', 'value' => time()],
+            ['created_by', 'default', 'value' => \Yii::$app->user->identity->primaryKey],
             [['initial_pay', 'total_pay'], 'number'],
             [['period', 'created_at', 'updated_at', 'created_by'], 'default', 'value' => null],
             [['period', 'created_at', 'updated_at', 'created_by'], 'integer'],

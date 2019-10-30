@@ -26,6 +26,12 @@ use Yii;
  */
 class Request extends \yii\db\ActiveRecord
 {
+    const STATUS_NEW = 10;
+    const STATUS_APPROVED = 20;
+    const STATUS_ACCEPTED = 30;
+    const STATUS_COMPLETED = 40;
+    const STATUS_ARCHIVED = 100;
+
     /**
      * {@inheritdoc}
      */
@@ -40,7 +46,7 @@ class Request extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'type', 'accepted_response_id', 'status', 'offer_id', 'created_by', 'created_at'], 'default', 'value' => null],
+            [['category_id', 'type', 'accepted_response_id', 'status', 'offer_id', 'created_by', 'created_at'], 'required'],
             [['category_id', 'type', 'accepted_response_id', 'status', 'offer_id', 'created_by', 'created_at'], 'integer'],
             [['description_long'], 'string'],
             [['description_short'], 'string', 'max' => 256],
@@ -109,4 +115,5 @@ class Request extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Response::className(), ['request_id' => 'id']);
     }
+
 }

@@ -35,7 +35,6 @@ class Response extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['request_id', 'status', 'offer_id', 'created_by', 'created_at'], 'default', 'value' => null],
             [['request_id', 'status', 'offer_id', 'created_by', 'created_at'], 'integer'],
             [['offer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Offer::className(), 'targetAttribute' => ['offer_id' => 'id']],
             [['request_id'], 'exist', 'skipOnError' => true, 'targetClass' => Request::className(), 'targetAttribute' => ['request_id' => 'id']],
