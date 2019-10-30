@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-use Yii;
+use trntv\filekit\behaviors\UploadBehavior;
 
 /**
  * This is the model class for table "request".
@@ -23,6 +23,7 @@ use Yii;
  * @property Response $acceptedResponse
  * @property User $createdBy
  * @property Response[] $responses
+ * @property ArticleAttachment[] $articleAttachments
  */
 class Request extends \yii\db\ActiveRecord
 {
@@ -33,11 +34,31 @@ class Request extends \yii\db\ActiveRecord
     const STATUS_ARCHIVED = 100;
 
     /**
+     * @var array
+     */
+    public $attachments;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'request';
+    }
+
+    public function behaviors()
+    {
+       return [
+           [
+               'class' => UploadBehavior::class,
+               'attribute' => 'attachments',
+               'multiple' => true,
+               'uploadRelation' => 'requestAttachments',
+               'pathAttribute' => 'path',
+               'baseUrlAttribute' => 'base_url',
+               'orderAttribute' => 'order',
+
+       ]];
     }
 
     /**
@@ -114,6 +135,14 @@ class Request extends \yii\db\ActiveRecord
     public function getResponses()
     {
         return $this->hasMany(Response::className(), ['request_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRequestAttachments()
+    {
+        return $this->hasMany(RequestAttachment::class, ['request_id' => 'id']);
     }
 
 }

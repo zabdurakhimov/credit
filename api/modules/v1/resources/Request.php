@@ -9,6 +9,7 @@ use common\models\User;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
+use yii\web\UploadedFile;
 
 /**
  * @author Eugene Terentev <eugene@terentev.net>
@@ -27,7 +28,7 @@ class Request extends \common\models\Request implements Linkable
     public function fields()
     {
         return ['type', 'accepted_response_id', 'status', 'offer_id', 'description_short',
-            'description_long', 'created_at', 'category', 'createdBy', 'acceptedResponse', 'offer', 'initial_pay', 'total_pay', 'period'];
+            'description_long', 'created_at', 'category', 'createdBy', 'acceptedResponse', 'offer', 'initial_pay', 'total_pay', 'period', 'attachments'];
     }
 
     public function __construct($config = [])
@@ -47,7 +48,7 @@ class Request extends \common\models\Request implements Linkable
     {
         return [
             [['initial_pay', 'total_pay', 'period'], 'required'],
-            [['category_id', 'description_short', 'description_long', 'type', 'offer'], 'required'],
+//            [['category_id', 'description_short', 'description_long', 'type', 'offer'], 'required'],
             ['status', 'default', 'value' => self::STATUS_NEW],
 //            ['offer', 'default', 'value' => new Offer()],
             ['offer_id', 'default', 'value' => $this->offer ? $this->offer->id : null],
@@ -77,6 +78,20 @@ class Request extends \common\models\Request implements Linkable
 
     public function beforeSave($insert)
     {
+        $uploads = UploadedFile::getInstancesByName("upfile");
+        if (empty($uploads)){
+            return "Must upload at least 1 file in upfile form-data POST";
+        }
+
+        // $uploads now contains 1 or more UploadedFile instances
+        $savedfiles = [];
+        foreach ($uploads as $file){
+            $path = '/file/storage/upload';
+                $file->saveAs($path); //Your uploaded file is saved, you can process it further from here
+
+        }
+
+
         if ($insert) {
             $offer = new Offer();
             $offer->initial_pay = $this->initial_pay;

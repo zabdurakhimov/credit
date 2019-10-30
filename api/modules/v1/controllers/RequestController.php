@@ -2,23 +2,12 @@
 
 namespace api\modules\v1\controllers;
 
-use api\modules\v1\resources\Article;
 use api\modules\v1\resources\Request;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\filters\auth\CompositeAuth;
-use yii\filters\auth\HttpBasicAuth;
-use yii\filters\auth\HttpBearerAuth;
-use yii\filters\auth\HttpHeaderAuth;
-use yii\filters\auth\QueryParamAuth;
+use yii\filters\auth\{CompositeAuth, QueryParamAuth, HttpBasicAuth, HttpBearerAuth, HttpHeaderAuth};
 use yii\rest\ActiveController;
-use yii\rest\IndexAction;
-use yii\rest\OptionsAction;
-use yii\rest\CreateAction;
-use yii\rest\UpdateAction;
-use yii\rest\DeleteAction;
-use yii\rest\Serializer;
-use yii\rest\ViewAction;
+use yii\rest\ {IndexAction, OptionsAction, CreateAction, ViewAction};
 use yii\web\HttpException;
 use yii\web\Response;
 
@@ -93,7 +82,6 @@ class RequestController extends ActiveController
             'create' => [
                 'class' => CreateAction::class,
                 'modelClass' => $this->modelClass,
-                //'prepareDataProvider' => [$this, 'prepareDataProvider']
             ],
             'view' => [
                 'class' => ViewAction::class,
