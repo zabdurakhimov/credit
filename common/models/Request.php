@@ -3,6 +3,7 @@
 namespace common\models;
 
 use trntv\filekit\behaviors\UploadBehavior;
+use Yii;
 
 /**
  * This is the model class for table "request".
@@ -32,6 +33,9 @@ class Request extends \yii\db\ActiveRecord
     const STATUS_ACCEPTED = 30;
     const STATUS_COMPLETED = 40;
     const STATUS_ARCHIVED = 100;
+
+    const TYPE_FUNDING = 1;
+    const TYPE_LENDING = 2;
 
     /**
      * @var array
@@ -144,5 +148,40 @@ class Request extends \yii\db\ActiveRecord
     {
         return $this->hasMany(RequestAttachment::class, ['request_id' => 'id']);
     }
+
+    public static function types()
+    {
+        return [
+            self::TYPE_FUNDING => Yii::t('common', 'Хочу взять в рассрочку'),
+            self::TYPE_LENDING => Yii::t('common', 'Хочу продать в рассрочку'),
+        ];
+    }
+
+
+
+    public static function labels() {
+        return [
+            self::STATUS_NEW => 'Новый',
+            self::STATUS_ACCEPTED => 'Принят',
+            self::STATUS_APPROVED => 'Одобрено',
+            self::STATUS_ARCHIVED => 'Архивирован',
+            self::STATUS_COMPLETED => 'Завершён',
+        ];
+    }
+    public function getStatusLabel() {
+        $labels = self::labels();
+        if(isset($labels[$this->status])){
+            return $labels[$this->status];
+        }
+    }
+
+
+    public function getTypeLabel() {
+        $labels = self::types();
+        if(isset($labels[$this->status])){
+            return $labels[$this->status];
+        }
+    }
+
 
 }

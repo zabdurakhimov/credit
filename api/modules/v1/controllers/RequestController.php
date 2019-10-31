@@ -49,6 +49,16 @@ class RequestController extends ActiveController
      *     ),
      * )
      *
+     * * @SWG\Get(path="/v1/request/get-types",
+     *     tags={"Get request types", "get-types"},
+     *     summary="Retrieves the collection of Request types.",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Request type collection response",
+     *         @SWG\Schema(ref = "#/definitions/Request")
+     *     ),
+     * )
+     *
      * * @SWG\Post  (path="/v1/request/create",
      *     tags={"Create", "create"},
      *     summary="Creates a new Request.",
@@ -104,6 +114,10 @@ class RequestController extends ActiveController
         return new ActiveDataProvider(array(
             'query' => Request::find()->with('category')
         ));
+    }
+
+    public function actionGetTypes(){
+        return \common\models\Request::types();
     }
 
     /**
