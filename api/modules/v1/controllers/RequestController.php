@@ -87,7 +87,12 @@ class RequestController extends ActiveController
             'index' => [
                 'class' => IndexAction::class,
                 'modelClass' => $this->modelClass,
-                'prepareDataProvider' => [$this, 'prepareDataProvider']
+                'prepareDataProvider' => [$this, 'prepareDataProvider'],
+            ],
+            'index-fund' => [
+                'class' => IndexAction::class,
+                'modelClass' => $this->modelClass,
+                'prepareDataProvider' => [$this, 'prepareDataProviderFund'],
             ],
             'create' => [
                 'class' => CreateAction::class,
@@ -112,7 +117,13 @@ class RequestController extends ActiveController
     public function prepareDataProvider()
     {
         return new ActiveDataProvider(array(
-            'query' => Request::find()->with('category')
+            'query' => Request::find()->where(['type' => Request::TYPE_LENDING])->with('category')
+        ));
+    }
+    public function prepareDataProviderFund()
+    {
+        return new ActiveDataProvider(array(
+            'query' => Request::find()->where(['type' => Request::TYPE_FUNDING])->with('category')
         ));
     }
 
@@ -131,6 +142,18 @@ class RequestController extends ActiveController
             ->andWhere(['id' => (int)$id])
 //            ->joinWith('category')
             ->one();
+        if (!$model) {
+            throw new HttpException(404);
+        }
+        return $model;
+    }
+
+    public function getList($type)
+    {
+        $model = \common\models\Request::find()
+            ->andWhere(['type' => (int)$type])
+//            ->joinWith('category')
+            ->all();
         if (!$model) {
             throw new HttpException(404);
         }
