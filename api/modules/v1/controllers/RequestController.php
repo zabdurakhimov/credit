@@ -91,7 +91,7 @@ class RequestController extends ActiveController
      *     ),
      * )
      *
-     * * @SWG\Get(path="/v1/request/get-list",
+     * * @SWG\Get(path="/v1/request/category-list",
      *     tags={"Get Category List"},
      *     summary="Displays all categories",
      *     @SWG\Response(
