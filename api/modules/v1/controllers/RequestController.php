@@ -3,6 +3,7 @@
 namespace api\modules\v1\controllers;
 
 use api\modules\v1\resources\Request;
+use common\models\Category;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\{CompositeAuth, QueryParamAuth, HttpBasicAuth, HttpBearerAuth, HttpHeaderAuth};
@@ -49,6 +50,17 @@ class RequestController extends ActiveController
      *     ),
      * )
      *
+     * /**
+     * @SWG\Get(path="/v1/request/my-requests",
+     *     tags={"List", "my-requests"},
+     *     summary="Retrieves the collection of my Requests.",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Article collection response",
+     *         @SWG\Schema(ref = "#/definitions/Request")
+     *     ),
+     * )
+     *
      * * @SWG\Get(path="/v1/request/get-types",
      *     tags={"Get request types", "get-types"},
      *     summary="Retrieves the collection of Request types.",
@@ -79,6 +91,23 @@ class RequestController extends ActiveController
      *     ),
      * )
      *
+     * * @SWG\Get(path="/v1/request/get-list",
+     *     tags={"Get Category List"},
+     *     summary="Displays all categories",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Displays all categories.",
+     *     ),
+     * )
+     * * * @SWG\Get(path="/v1/request/list-by-category",
+     *     tags={"Get Request list by category and/or type"},
+     *     summary="Displays all requests with no params",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Displays all categories. Params -- type, category",
+     *     ),
+     * )
+     *
 
      */
     public function actions()
@@ -93,6 +122,11 @@ class RequestController extends ActiveController
                 'class' => IndexAction::class,
                 'modelClass' => $this->modelClass,
                 'prepareDataProvider' => [$this, 'prepareDataProviderFund'],
+            ],
+            'my-requests' => [
+                'class' => IndexAction::class,
+                'modelClass' => $this->modelClass,
+                'prepareDataProvider' => [$this, 'prepareDataProviderMy'],
             ],
             'create' => [
                 'class' => CreateAction::class,
@@ -126,6 +160,13 @@ class RequestController extends ActiveController
             'query' => Request::find()->where(['type' => Request::TYPE_FUNDING])->with('category')
         ));
     }
+    public function prepareDataProviderMy()
+    {
+        return new ActiveDataProvider(array(
+            'query' => Request::find()->where(['created_by' => Yii::$app->user->identity->id])->with('category')
+        ));
+    }
+
 
     public function actionGetTypes(){
         return \common\models\Request::types();
@@ -158,5 +199,27 @@ class RequestController extends ActiveController
             throw new HttpException(404);
         }
         return $model;
+    }
+
+    public function actionCategoryList()
+    {
+        return Category::getCategoryList();
+    }
+
+    public function actionListByCategory($type = null, $category = null)
+    {
+        if($type !== null){
+            $type = ['type' => $type];
+        }else{
+            $type = [];
+        }
+        if($category !== null){
+            $category = ['category_id' => $category];
+        }else{
+            $category = [];
+        }
+        return new ActiveDataProvider(array(
+            'query' => Request::find()->where(array_merge($type, $category))->with('category')
+        ));
     }
 }

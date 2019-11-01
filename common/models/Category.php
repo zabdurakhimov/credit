@@ -85,7 +85,7 @@ class Category extends Tree
 
     public static function getCategoryList()
     {
-        return Category::find()->where(['active' => 1])->addOrderBy('root, lft');
+        return Category::find()->select(['id', 'name'])->where(['active' => 1])->addOrderBy('root, lft')->all();
     }
 
     public static function getBottomCategoryList()
