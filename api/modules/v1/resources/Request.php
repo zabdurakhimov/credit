@@ -76,19 +76,6 @@ class Request extends \common\models\Request implements Linkable
 
     public function beforeSave($insert)
     {
-        $uploads = UploadedFile::getInstancesByName("upfile");
-        if (empty($uploads)){
-            return "Must upload at least 1 file in upfile form-data POST";
-        }
-
-        // $uploads now contains 1 or more UploadedFile instances
-        $savedfiles = [];
-        foreach ($uploads as $file){
-            $path = '/file/storage/upload';
-                $file->saveAs($path); //Your uploaded file is saved, you can process it further from here
-
-        }
-
 
         if ($insert) {
             $offer = new Offer();
