@@ -178,8 +178,8 @@ class Request extends \yii\db\ActiveRecord
 
     public function getTypeLabel() {
         $labels = self::types();
-        if(isset($labels[$this->status])){
-            return $labels[$this->status];
+        if(isset($labels[$this->type])){
+            return $labels[$this->type];
         }
     }
 
