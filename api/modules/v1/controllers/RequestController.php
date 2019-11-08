@@ -148,9 +148,9 @@ class RequestController extends ActiveController
      *     ),
      * )
      *
-     *  @SWG\Post  (path="/v1/request/make-offer",
-     *     tags={"Make an offer"},
-     *     summary="Makes an offer to the given request, params: request_id, initial_pay, total_pay, period",
+     *  @SWG\Post  (path="/v1/request/make-response",
+     *     tags={"Make a response offer"},
+     *     summary="Makes a response offer to the given request, params: request_id, initial_pay, total_pay, period",
      *     @SWG\Response(
      *         response = 200,
      *         description = "Makes an offer to the given request, params: request_id, initial_pay, total_pay, period",
