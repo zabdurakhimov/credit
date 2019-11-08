@@ -140,10 +140,10 @@ class RequestController extends ActiveController
      *
      * * * @SWG\Post  (path="/v1/request/add-to-favorite",
      *     tags={"Ad  To Favorite", "add-to-favorite"},
-     *     summary="Makes a request favorite.",
+     *     summary="Makes a request favorite, param: request_id",
      *     @SWG\Response(
      *         response = 200,
-     *         description = "Request collection response",
+     *         description = "Makes a request favorite, param: request_id",
      *         @SWG\Schema(ref = "#/definitions/Request")
      *     ),
      * )
