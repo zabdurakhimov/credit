@@ -139,11 +139,21 @@ class RequestController extends ActiveController
      *
      *
      * * * @SWG\Post  (path="/v1/request/add-to-favorite",
-     *     tags={"Ad  To Favorite", "add-to-favorite"},
+     *     tags={"Add To Favorite", "add-to-favorite"},
      *     summary="Makes a request favorite, param: request_id",
      *     @SWG\Response(
      *         response = 200,
      *         description = "Makes a request favorite, param: request_id",
+     *         @SWG\Schema(ref = "#/definitions/Request")
+     *     ),
+     * )
+     *
+     *  @SWG\Post  (path="/v1/request/make-offer",
+     *     tags={"Make an offer"},
+     *     summary="Makes an offer to the given request, params: request_id, initial_pay, total_pay, period",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Makes an offer to the given request, params: request_id, initial_pay, total_pay, period",
      *         @SWG\Schema(ref = "#/definitions/Request")
      *     ),
      * )
@@ -172,6 +182,10 @@ class RequestController extends ActiveController
             'create' => [
                 'class' => CreateAction::class,
                 'modelClass' => $this->modelClass,
+            ],
+            'make-response' => [
+                'class' => CreateAction::class,
+                'modelClass' => \common\models\Response::class,
             ],
             'add-to-favorite' => [
                 'class' => CreateAction::class,
@@ -295,6 +309,12 @@ class RequestController extends ActiveController
     public function actionFavorite(){
         return new ActiveDataProvider(array(
             'query' => Request::find()->joinWith('favorite')->where(['request_favorite.created_by' => Yii::$app->user->identity->id])
+        ));
+    }
+
+    public function actionResponses($id){
+        return new ActiveDataProvider(array(
+            'query' => \common\models\Response::find()->joinWith('offer')->where(['response.request_id' => $id])
         ));
     }
 }

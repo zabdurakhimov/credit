@@ -5,7 +5,6 @@ namespace api\modules\v1\controllers;
 use api\modules\v1\models\LoginFormAPI;
 use common\models\User;
 use Yii;
-use yii\base\Action;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
@@ -83,9 +82,6 @@ class UserController extends Controller
      */
     public function actionLogin()
     {
-        /**
-         * TODO: assign user_id by ud_id in cart table
-         */
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $data = Yii::$app->getRequest()->getBodyParams();
