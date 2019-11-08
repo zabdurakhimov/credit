@@ -24,6 +24,7 @@ use Yii;
  * @property Response $acceptedResponse
  * @property User $createdBy
  * @property Response[] $responses
+ * @property RequestFavorite[] $favorite
  * @property ArticleAttachment[] $articleAttachments
  */
 class Request extends \yii\db\ActiveRecord
@@ -181,6 +182,11 @@ class Request extends \yii\db\ActiveRecord
         if(isset($labels[$this->type])){
             return $labels[$this->type];
         }
+    }
+
+    public function getFavorite()
+    {
+        return $this->hasMany(RequestFavorite::class, ['request_id' => 'id']);
     }
 
 

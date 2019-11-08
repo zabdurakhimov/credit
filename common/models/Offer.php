@@ -11,12 +11,14 @@ use Yii;
  * @property double $initial_pay
  * @property double $total_pay
  * @property int $period
+ * @property int $request_id
  * @property int $created_at
  * @property int $updated_at
  * @property int $created_by
  *
  * @property User $createdBy
  * @property Request[] $requests
+ * @property Request $request
  * @property Response[] $responses
  */
 class Offer extends \yii\db\ActiveRecord

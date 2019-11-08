@@ -30,7 +30,7 @@ class Request extends \common\models\Request implements Linkable
 
     public function fields()
     {
-        return ['type', 'accepted_response_id', 'status', 'description_short','typeLabel', 'statusLabel',
+        return ['id', 'type', 'accepted_response_id', 'status', 'description_short','typeLabel', 'statusLabel',
             'description_long', 'created_at', 'category', 'createdBy', 'acceptedResponse', 'offer', 'initial_pay', 'total_pay', 'period', 'attachments', 'status_label'];
     }
 

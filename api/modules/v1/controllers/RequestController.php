@@ -4,11 +4,12 @@ namespace api\modules\v1\controllers;
 
 use api\modules\v1\resources\Request;
 use common\models\Category;
+use common\models\RequestFavorite;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\{CompositeAuth, QueryParamAuth, HttpBasicAuth, HttpBearerAuth, HttpHeaderAuth};
 use yii\rest\ActiveController;
-use yii\rest\ {IndexAction, OptionsAction, CreateAction, ViewAction};
+use yii\rest\ {IndexAction, OptionsAction, CreateAction, ViewAction, DeleteAction};
 use yii\web\HttpException;
 use yii\web\Response;
 
@@ -108,6 +109,46 @@ class RequestController extends ActiveController
      *     ),
      * )
      *
+     *
+     *   * * * @SWG\Get(path="/v1/request/my-posts",
+     *     tags={"Get Request list by created by current user"},
+     *     summary="Get Request list by created by current user",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Get Request list created by current user",
+     *     ),
+     * )
+     *
+     * *   * * * @SWG\Get(path="/v1/request/favorite",
+     *     tags={"Get Request list by starred by current user"},
+     *     summary="Get Request list starred by current user",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Get Request list starred by current user",
+     *     ),
+     * )
+     *
+     *     @SWG\Get(path="/v1/request/delete-from-favorite",
+     *     tags={"Removes a request from favorite, param: request_id"},
+     *     summary="Removes a request from favorite, param: request_id",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Removes a request from favorite, param: request_id",
+     *     ),
+     * )
+     *
+     *
+     * * * @SWG\Post  (path="/v1/request/add-to-favorite",
+     *     tags={"Ad  To Favorite", "add-to-favorite"},
+     *     summary="Makes a request favorite.",
+     *     @SWG\Response(
+     *         response = 200,
+     *         description = "Request collection response",
+     *         @SWG\Schema(ref = "#/definitions/Request")
+     *     ),
+     * )
+     *
+     *
 
      */
     public function actions()
@@ -132,10 +173,19 @@ class RequestController extends ActiveController
                 'class' => CreateAction::class,
                 'modelClass' => $this->modelClass,
             ],
+            'add-to-favorite' => [
+                'class' => CreateAction::class,
+                'modelClass' => RequestFavorite::class,
+            ],
             'view' => [
                 'class' => ViewAction::class,
                 'modelClass' => $this->modelClass,
                 'findModel' => [$this, 'findModel']
+            ],
+            'delete-from-favorite' => [
+                'class' => DeleteAction::class,
+                'modelClass' => RequestFavorite::class,
+                'findModel' => [$this, 'findFavorite']
             ],
             'options' => [
                 'class' => OptionsAction::class,
@@ -189,6 +239,20 @@ class RequestController extends ActiveController
         return $model;
     }
 
+
+    public function findFavorite($id)
+    {
+        $model = \common\models\RequestFavorite::find()
+            ->andWhere(['request_id' => (int)$id])
+            ->andWhere(['created_by' => Yii::$app->user->identity->id])
+//            ->joinWith('category')
+            ->one();
+        if (!$model) {
+            throw new HttpException(404);
+        }
+        return $model;
+    }
+
     public function getList($type)
     {
         $model = \common\models\Request::find()
@@ -220,6 +284,17 @@ class RequestController extends ActiveController
         }
         return new ActiveDataProvider(array(
             'query' => Request::find()->where(array_merge($type, $category))->with('category')
+        ));
+    }
+    public function actionMyPosts(){
+        return new ActiveDataProvider(array(
+            'query' => Request::find()->where(['created_by' => Yii::$app->user->identity->id])->with('category')
+        ));
+    }
+
+    public function actionFavorite(){
+        return new ActiveDataProvider(array(
+            'query' => Request::find()->joinWith('favorite')->where(['request_favorite.created_by' => Yii::$app->user->identity->id])
         ));
     }
 }
