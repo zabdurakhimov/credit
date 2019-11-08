@@ -5,6 +5,7 @@ namespace api\modules\v1\controllers;
 use api\modules\v1\models\LoginFormAPI;
 use common\models\User;
 use Yii;
+use yii\base\Action;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\HttpBearerAuth;
@@ -55,11 +56,11 @@ class UserController extends Controller
     public function actions()
     {
         return [
-            'view' => [
-                'class' => ViewAction::class,
+            /*'view' => [
+                'class' => OptionsAction::class,
                 'modelClass' => $this->modelClass,
                 'findModel' => [$this, 'findByPhone']
-            ],
+            ],*/
             'options' => [
                 'class' => OptionsAction::class
             ]
@@ -145,12 +146,12 @@ class UserController extends Controller
      * @return array|null|\yii\db\ActiveRecord
      * @throws HttpException
      */
-    public function findByPhone($phone)
+    public function actionView()
     {
         $model = User::find()
             ->joinWith('userProfile', true)
             ->active()
-            ->andWhere(['user.phone_number' => $phone])
+            ->andWhere(['user.id' => Yii::$app->user->identity->id])
             ->asArray()
             ->one();
         if (!$model) {
