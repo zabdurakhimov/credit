@@ -35,7 +35,7 @@ class Response extends \yii\db\ActiveRecord
 
     public function fields()
     {
-        return ['id', 'request_id', 'status', 'offer_id', 'created_by', 'created_at', 'offer', 'created_by'];
+        return ['id', 'request_id', 'status', 'offer_id', 'created_by', 'created_at', 'offer', 'createdBy'];
     }
 
     /**
